@@ -13,17 +13,17 @@ from user_setup_and_utils import *
 settings = import_settings()
 classes = settings['classes']
 colors = settings['colors']
-svs_fol = settings['svs_fol']
+wsi_fol = settings['wsi_fol']
 input_mask_fol = settings['mask_fol']
 out_fol = settings['coordinate_fol']
-svs_extension = settings['svs_extension']
+wsi_extension = settings['wsi_extension']
 
 class_colors = {classes[i]:colors[i] for i in range(len(colors))}
 class_ids = {classes[i]:i for i in range(len(classes))}
 create_fol_if_not_exist(out_fol)
 
 
-settings = {'classes':classes, 'colors':colors, 'annotation_fol':annotation_fol, 'svs_fol':svs_fol, 'mask_fol':mask_fol, 'coordinate_fol':coordinate_fol, 'patches_fol':patches_fol, 'creators':creators, 'svs_extension':svs_extension, 'mag_at_extraction':mag_at_extraction, 'patch_size_ROI':patch_size_ROI, 'patch_size_extracted':patch_size_extracted}
+settings = {'classes':classes, 'colors':colors, 'annotation_fol':annotation_fol, 'wsi_fol':wsi_fol, 'mask_fol':mask_fol, 'coordinate_fol':coordinate_fol, 'patches_fol':patches_fol, 'creators':creators, 'wsi_extension':wsi_extension, 'mag_at_extraction':mag_at_extraction, 'patch_size_ROI':patch_size_ROI, 'patch_size_extracted':patch_size_extracted}
 
 mag_at_extraction = settings['mag_at_extraction']
 patch_size_ROI = settings['patch_size_ROI']
@@ -68,9 +68,9 @@ def extract_patch(slide):
     for key, _ in class_colors.items():
         masks[key] = np.zeros(annots.shape[:2])
 
-    slideID = slide[:-4] + '.' + svs_extension
+    slideID = slide[:-4] + '.' + wsi_extension
 
-    slide_path = os.path.join(svs_fol, slideID)
+    slide_path = os.path.join(wsi_fol, slideID)
     if not os.path.exists(slide_path):
         print('file not found: ', slideID)
         return
@@ -131,7 +131,7 @@ def extract_patch(slide):
             blob_y_x = find_blobs(masks[key], scale, scale, offset_to_top_left)
             corrs[key].extend(blob_y_x)
 
-    corr_file = open(os.path.join(out_fol, slide[:-4] + '.' + svs_extension + '.txt'), 'w')
+    corr_file = open(os.path.join(out_fol, slide[:-4] + '.' + wsi_extension + '.txt'), 'w')
     for key, val in corrs.items():
         for y, x in val:
             corr_file.writelines('{} {} {} {}\n'.format(slide.split('.')[0], x, y, class_ids[key]))

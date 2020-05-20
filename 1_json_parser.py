@@ -14,7 +14,7 @@ settings = import_settings()
 classes = settings['classes']
 colors = settings['colors']
 annots_fol = settings['annotation_fol']
-svs_fol = settings['svs_fol']
+wsi_fol = settings['wsi_fol']
 out_fol = settings['mask_fol']
 creators = settings['creators']
 
@@ -28,7 +28,7 @@ numWSINotFound = 0
 
 def process_json(fn):
     slideID = fn_to_slideID[fn.split('/')[-1]]
-    slide_path = os.path.join(svs_fol, slideID)
+    slide_path = os.path.join(wsi_fol, slideID)
 
     if not os.path.exists(slide_path):
         print('WSI not found: ================', slideID)

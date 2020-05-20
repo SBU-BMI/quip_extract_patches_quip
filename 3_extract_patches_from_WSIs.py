@@ -11,7 +11,7 @@ import multiprocessing as mp
 from user_setup_and_utils import *
 
 settings = import_settings()
-svs_fol = settings['svs_fol']
+wsi_fol = settings['wsi_fol']
 corr_fol = settings['coordinate_fol']
 output_folder = settings['patches_fol']
 create_fol_if_not_exist(output_folder)
@@ -28,7 +28,7 @@ def extract_svs(fn):
     print('Processing... ', fn)
     slide = fn[:-4]
 
-    slide_path = os.path.join(svs_fol, slide)
+    slide_path = os.path.join(wsi_fol, slide)
     if not os.path.exists(slide_path):
         print('file not found: ', slide)
         return
