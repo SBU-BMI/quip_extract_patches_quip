@@ -10,7 +10,6 @@ def process(fn):
     os.system(cmd)
 
 if __name__ == '__main__':
-    #in_fol = 'patches_lung_seer_john_mucinous'
     in_fol = sys.argv[1]
 
     out_fol = in_fol + '_web'
