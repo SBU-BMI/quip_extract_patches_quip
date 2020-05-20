@@ -19,3 +19,11 @@ Change the parameters in user_setup_and_utils.py accordingly.
 - Run "python 3_extract_patches_from_WSIs.py"
 - Output is patches stored in patches_fol
 - Patches' filename has the format: ${WSI_name}\_${x_top_left}\_${y_top_left}\_${patch_size_at_highest_mag}\_${patch_size_at_stored_mag}\_${label}.png
+
+e.g, 001738-000118-multires.tif_3457_12389_288_200_0.png
+- ${WSI_name} = 001738-000118-multires.tif
+- ${x_top_left} = 3457
+- ${y_top_left} = 12389
+- ${patch_size_at_highest_mag} = 288  # this is at 28X
+- ${patch_size_at_stored_mag} = 200   # this is at 20X
+- ${label} = 0
