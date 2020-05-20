@@ -7,27 +7,24 @@ import openslide
 import os
 import pdb
 import multiprocessing as mp
+from user_setup_and_utils import *
 
-# name of classes and its color accordingly
-classes = ['Prostate-Benign', 'Prostate-Gleason 3', 'Prostate-Gleason 4', 'Prostate-Gleason 5-Single Cells', 'Prostate-Gleason 5']
-colors = [(255, 0, 0), (255, 127, 0), (0, 0, 255), (255, 255, 255), (255, 255, 0)]
-annots_fol = '/data10/shared/hanle/extract_prostate_seer_john_grade5_subtypes/SEER-Rutgers-Prostate-2020-2-14'
-svs_fol = '/data10/shared/hanle/svs_SEER_PRAD'
-creators = {'32', '49'}  # 32 for  john.vanarnam; 49 for vanarnam3
-out_fol = 'json_to_image/'
+settings = import_settings()
 
-if not os.path.exists(out_fol):
-    os.mkdir(out_fol)
-os.system('rm -rf {}/*'.format(out_fol))
+classes = settings['classes']
+colors = settings['colors']
+annots_fol = settings['annotation_fol']
+svs_fol = settings['svs_fol']
+out_fol = settings['mask_fol']
+creators = settings['creators']
 
+create_fol_if_not_exist(out_fol)
 class_colors = {classes[i]:colors[i] for i in range(len(colors))}
 
-annot_types = collections.defaultdict(int)
 manifest = [f.rstrip().split(',') for f in open(annots_fol + '/manifest.csv')]
 fn_to_slideID = {fn.replace("\"", ""):slideID.split('/')[-1].replace("\"", "") for _, _, _, _, _, slideID, fn in manifest[1:]}
 
 numWSINotFound = 0
-
 
 def process_json(fn):
     slideID = fn_to_slideID[fn.split('/')[-1]]
