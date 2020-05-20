@@ -22,9 +22,13 @@ class_colors = {classes[i]:colors[i] for i in range(len(colors))}
 class_ids = {classes[i]:i for i in range(len(classes))}
 create_fol_if_not_exist(out_fol)
 
-mag_at_extraction = 20
-patch_size_ROI = 200    # patch size of the ROI
-offset = int((200 - patch_size_ROI)/2)  # patch size that contains surrounding area for context purpose.
+
+settings = {'classes':classes, 'colors':colors, 'annotation_fol':annotation_fol, 'svs_fol':svs_fol, 'mask_fol':mask_fol, 'coordinate_fol':coordinate_fol, 'patches_fol':patches_fol, 'creators':creators, 'svs_extension':svs_extension, 'mag_at_extraction':mag_at_extraction, 'patch_size_ROI':patch_size_ROI, 'patch_size_extracted':patch_size_extracted}
+
+mag_at_extraction = settings['mag_at_extraction']
+patch_size_ROI = settings['patch_size_ROI']
+patch_size_extracted = settings['patch_size_extracted']
+offset = int((patch_size_extracted - patch_size_ROI)/2)  # patch size that contains surrounding area for context purpose.
 
 slide_ids = [fn for fn in os.listdir(input_mask_fol) if '.png' in fn]
 

@@ -14,17 +14,15 @@ settings = import_settings()
 svs_fol = settings['svs_fol']
 corr_fol = settings['coordinate_fol']
 output_folder = settings['patches_fol']
-
 create_fol_if_not_exist(output_folder)
 
-patch_size_ROI = 200
-offset_to_top_left = 0
-mag_at_extraction = 20
-level = 0
+patch_size_extracted = settings['patch_size_extracted']
+mag_at_extraction = settings['mag_at_extraction']
+offset_to_top_left = 0  # an extra setting to extract surrounding area
+level = settings['level']
 
 slide_corrs = [f for f in os.listdir(corr_fol) if 'txt' in f]
 print(slide_corrs)
-
 
 def extract_svs(fn):
     print('Processing... ', fn)
@@ -50,7 +48,7 @@ def extract_svs(fn):
         else:
             print('[WARNING] mpp value not found. Assuming it is 40X with mpp=0.254!', slide);
             mag = 10.0 / float(0.254);
-        pw = int(patch_size_ROI * mag / mag_at_extraction);
+        pw = int(patch_size_extracted * mag / mag_at_extraction);
         pw_offset = int(offset_to_top_left * mag / mag_at_extraction)
 
         width = oslide.dimensions[0];
@@ -66,14 +64,14 @@ def extract_svs(fn):
 
         if x < 0 or x < 0: continue
         fname = '{}/{}_{}_{}_{}_{}_{}.png'.format(output_folder, slide, x, y,\
-                pw + 2*pw_offset, 2*offset_to_top_left + patch_size_ROI, lb)
+                pw + 2*pw_offset, 2*offset_to_top_left + patch_size_extracted, lb)
         patch = oslide.read_region((int(x), int(y)), 0, (pw + 2*pw_offset, pw + 2*pw_offset));
         patch_arr = np.array(patch);
         wh = (np.std(patch_arr[:,:,0].flatten()) + np.std(patch_arr[:,:,1].flatten()) + np.std(patch_arr[:,:,2].flatten())) / 3.0
         if(patch_arr[:,:,3].max() == 0 or wh <= 12):
             continue
 
-        patch = patch.resize((int(patch_size_ROI + 2*offset_to_top_left), int(patch_size_ROI + 2*offset_to_top_left)), Image.ANTIALIAS);
+        patch = patch.resize((int(patch_size_extracted + 2*offset_to_top_left), int(patch_size_extracted + 2*offset_to_top_left)), Image.ANTIALIAS);
         patch.save(fname);
 
 
