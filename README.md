@@ -3,6 +3,9 @@ This repo contains codes that extract patches from WSIs given the annotations do
 
 ### Change parameter settings
 Change the parameters in user_setup_and_utils.py accordingly.
+All the basic parameters are found in user_setup_and_utils.py
+The label of each class is the index of that class in parameter classes.
+For example, if classes = ['Prostate-Benign', 'Prostate-Gleason 3'], then the label of "Prostate-Benign" is 0, "Prostate-Gleason 3" is 1
 
 ### Convert json annotations to png masks
 
