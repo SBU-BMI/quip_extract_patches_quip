@@ -51,7 +51,8 @@ def process_json(fn):
         if 'creator' not in region:
             continue
         creator = region['creator']
-        if creator not in creators:
+        if len(creators) > 0 and (creator not in creators):
+            print('Skip this creator: ', creator)
             continue
 
         coors = region['geometries']['features'][0]['geometry']['coordinates'][0]

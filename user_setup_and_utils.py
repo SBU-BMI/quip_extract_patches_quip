@@ -10,7 +10,8 @@ colors = [(255, 0, 0), (255, 127, 0), (0, 0, 255), (255, 255, 255), (255, 255, 0
 # path to the annotation folder that is downloaded from QUIP
 annotation_fol = '/data10/shared/hanle/extract_prostate_seer_john_grade5_subtypes/SEER-Rutgers-Prostate-2020-2-14'
 # creator ID of the annotators
-creators = {'32', '49'}     # 32 for  john.vanarnam; 49 for vanarnam3
+creators = {}     # '32' for  john.vanarnam; '49' for vanarnam3. If creators == {}: use everyone's annotations.
+
 
 # path to WSI folder
 wsi_fol = '/data10/shared/hanle/svs_SEER_PRAD'
