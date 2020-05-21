@@ -18,18 +18,14 @@ input_mask_fol = settings['mask_fol']
 out_fol = settings['coordinate_fol']
 wsi_extension = settings['wsi_extension']
 
-class_colors = {classes[i]:colors[i] for i in range(len(colors))}
-class_ids = {classes[i]:i for i in range(len(classes))}
-create_fol_if_not_exist(out_fol)
-
-
-settings = {'classes':classes, 'colors':colors, 'annotation_fol':annotation_fol, 'wsi_fol':wsi_fol, 'mask_fol':mask_fol, 'coordinate_fol':coordinate_fol, 'patches_fol':patches_fol, 'creators':creators, 'wsi_extension':wsi_extension, 'mag_at_extraction':mag_at_extraction, 'patch_size_ROI':patch_size_ROI, 'patch_size_extracted':patch_size_extracted}
-
 mag_at_extraction = settings['mag_at_extraction']
 patch_size_ROI = settings['patch_size_ROI']
 patch_size_extracted = settings['patch_size_extracted']
 offset = int((patch_size_extracted - patch_size_ROI)/2)  # patch size that contains surrounding area for context purpose.
 
+class_colors = {classes[i]:colors[i] for i in range(len(colors))}
+class_ids = {classes[i]:i for i in range(len(classes))}
+create_fol_if_not_exist(out_fol)
 slide_ids = [fn for fn in os.listdir(input_mask_fol) if '.png' in fn]
 
 def find_blobs(img, xScale=1.0, yScale=1.0, offset_to_top_left=0):
