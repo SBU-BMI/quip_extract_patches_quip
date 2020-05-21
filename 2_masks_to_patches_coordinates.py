@@ -17,6 +17,7 @@ wsi_fol = settings['wsi_fol']
 input_mask_fol = settings['mask_fol']
 out_fol = settings['coordinate_fol']
 wsi_extension = settings['wsi_extension']
+max_patches_per_class_per_wsi = settings['max_patches_per_class_per_wsi']
 
 mag_at_extraction = settings['mag_at_extraction']
 patch_size_ROI = settings['patch_size_ROI']
@@ -29,7 +30,6 @@ create_fol_if_not_exist(out_fol)
 slide_ids = [fn for fn in os.listdir(input_mask_fol) if '.png' in fn]
 
 def find_blobs(img, xScale=1.0, yScale=1.0, offset_to_top_left=0):
-    print('shape of img: ', img.shape)
     img = img*255
     img = img.astype(np.uint8)
     kernel = np.ones((3,3), np.uint8)
@@ -37,7 +37,6 @@ def find_blobs(img, xScale=1.0, yScale=1.0, offset_to_top_left=0):
 
     # find contours in the binary image
     cnts = cv2.findContours(img, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-    print('len of contours: ', len(cnts))
     if len(cnts) == 3:
         _, contours, _ = cnts
     else:
@@ -97,8 +96,9 @@ def extract_patch(slide):
         cond = np.logical_and(R == class_colors[key][0], G == class_colors[key][1])
         cond = np.logical_and(cond, B == class_colors[key][2])
         masks[key][cond] = 1
-        print(key, class_ids[key], class_colors[key], np.sum(masks[key]))
-        sys.stdout.flush()
+        if np.sum(masks[key]) > 0:
+            print('Class name: {}; label: {}; color: {}; annotated region: {} pixels'.format(key, class_ids[key], class_colors[key], np.sum(masks[key])))
+            sys.stdout.flush()
 
     corrs = {}
     for key in class_colors.keys():
@@ -117,9 +117,11 @@ def extract_patch(slide):
                     corrs[key].append((int((r - offset_mask) * scale), int((c - offset_mask) * scale)))
 
     for key, val in corrs.items():
-        random.shuffle(val)
-        limit = 20
-        corrs[key] = val[:min(limit, len(val))]
+        if max_patches_per_class_per_wsi >= 0:
+            random.shuffle(val)
+            corrs[key] = val[:min(max_patches_per_class_per_wsi, len(val))]
+        else:
+            corrs[key] = val[:]
 
     offset_to_top_left = pw_mask / 2  + offset
     for key in corrs.keys():
